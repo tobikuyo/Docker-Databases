@@ -1,9 +1,10 @@
+const { ObjectId } = require('mongodb');
 const User = require('../models/User');
 const init = require('../database/config');
 
 /**
  * Get all users from the database and return them as instances of  the 'User' model.
- * @param {User} userModel this function should be called with the 'User' model.
+ * @param {User} userModel should be called with the 'User' model.
  */
 const fetchAllUsers = userModel => async (resolve, reject) => {
 	const User = userModel;
@@ -19,8 +20,27 @@ const fetchAllUsers = userModel => async (resolve, reject) => {
 };
 
 /**
+ * @param {User} userModel should be called with the 'User' model.
+ */
+const findUserWithId = (id, userModel) => async (resolve, reject) => {
+	const User = userModel;
+
+	try {
+		const db = await init();
+		const data = await db
+			.collection('users')
+			.find({ _id: ObjectId(id) })
+			.toArray();
+		const user = new User({ id: data[0]._id, ...data[0] });
+		resolve(user);
+	} catch (error) {
+		reject(`Error finding a user with the id '${id}'`);
+	}
+};
+
+/**
  * Add a new user to the database and return it as an instance of the 'User' model.
- * @param {User} userModel this function should be called with the 'User' model.
+ * @param {User} userModel  should be called with the 'User' model.
  */
 const addNewUser = (username, location, userModel) => async (resolve, reject) => {
 	const User = userModel;
@@ -35,4 +55,4 @@ const addNewUser = (username, location, userModel) => async (resolve, reject) =>
 	}
 };
 
-module.exports = { fetchAllUsers, addNewUser };
+module.exports = { fetchAllUsers, findUserWithId, addNewUser };

@@ -1,4 +1,8 @@
-const { fetchAllUsers } = require('../controllers/users');
+const {
+	fetchAllUsers,
+	addNewUser,
+	findUserWithId
+} = require('../controllers/users');
 
 class User {
 	constructor(data) {
@@ -9,6 +13,10 @@ class User {
 
 	static all() {
 		return new Promise(fetchAllUsers(User));
+	}
+
+	static find(id) {
+		return new Promise(findUserWithId(id, User));
 	}
 
 	static create(username, location) {
