@@ -12,4 +12,18 @@ router.get('/', async (req, res) => {
 	}
 });
 
+router.post('/', async (req, res) => {
+	try {
+		const { username, location } = req.body;
+		const user = await User.create(username, location);
+
+		res.status(201).json({
+			message: `User '${username}' has been added to the database`,
+			data: user
+		});
+	} catch (error) {
+		res.status(400).json({ message: 'Something went wrong' });
+	}
+});
+
 module.exports = router;

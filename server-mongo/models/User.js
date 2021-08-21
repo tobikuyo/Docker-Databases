@@ -11,4 +11,9 @@ class User {
 		return new Promise(fetchAllUsers(User));
 	}
 
+	static create(username, location) {
+		return new Promise(addNewUser(username, location, User));
+	}
+}
+
 module.exports = User;
