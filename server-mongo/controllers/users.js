@@ -55,4 +55,26 @@ const addNewUser = (username, location, userModel) => async (resolve, reject) =>
 	}
 };
 
-module.exports = { fetchAllUsers, findUserWithId, addNewUser };
+/**
+ * @param {object} update should be called with the request body, containing the properties that need to be updated.
+ * @param {User} userModel  should be called with the 'User' model.
+ */
+const updateUser = (id, update, userModel) => async (resolve, reject) => {
+	const User = userModel;
+	try {
+		const db = await init();
+		const data = await db
+			.collection('users')
+			.findOneAndUpdate(
+				{ _id: ObjectId(id) },
+				{ $set: { ...update } },
+				{ returnDocument: 'after' }
+			);
+		const user = new User({ id, ...data.value });
+		resolve(user);
+	} catch (error) {
+		reject('Error updating user details');
+	}
+};
+
+module.exports = { fetchAllUsers, findUserWithId, addNewUser, updateUser };

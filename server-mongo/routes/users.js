@@ -37,4 +37,16 @@ router.post('/', async (req, res) => {
 	}
 });
 
+router.patch('/:id', async (req, res) => {
+	const { id } = req.params;
+
+	try {
+		const user = await User.find(id);
+		const updatedUser = await user.update(req.body);
+		res.status(200).json({ data: updatedUser });
+	} catch (error) {
+		res.status(404).json({ message: `There is no user with the id '${id}'` });
+	}
+});
+
 module.exports = router;

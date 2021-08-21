@@ -1,6 +1,7 @@
 const {
 	fetchAllUsers,
 	addNewUser,
+	updateUser,
 	findUserWithId
 } = require('../controllers/users');
 
@@ -21,6 +22,10 @@ class User {
 
 	static create(username, location) {
 		return new Promise(addNewUser(username, location, User));
+	}
+
+	update(body) {
+		return new Promise(updateUser(this.id, body, User));
 	}
 }
 
