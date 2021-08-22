@@ -6,6 +6,12 @@ services:
         working_dir: /code
         ports:
             - 8000:8000
+        environment:
+            - PGHOST=db
+            - PGUSER=tobikuyo
+            - PGPASSWORD=pass
+            - PGDATABASE=social
+            - PGPORT=5432
         volumes:
             - type: bind
               source: ./
