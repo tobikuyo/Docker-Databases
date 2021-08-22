@@ -17,6 +17,18 @@ const getAllUsers = userModel => async (resolve, reject) => {
 	}
 };
 
+const findUserWithId = (id, userModel) => async (resolve, reject) => {
+	const User = userModel;
+
+	try {
+		const data = await db.query('SELECT * FROM users WHERE id = $1;', [id]);
+		const user = new User(data.rows[0]);
+		resolve(user);
+	} catch (error) {
+		reject('Could not find a user with that id');
+	}
+};
+
 /**
  * @param {User} userModel should be called with the 'User' model.
  */
@@ -35,4 +47,22 @@ const addNewUser = (username, location, userModel) => async (resolve, reject) =>
 	}
 };
 
-module.exports = { getAllUsers, addNewUser };
+/**
+ * @param {User} userModel should be called with the 'User' model.
+ */
+const updateUser = (id, update, userModel) => async (resolve, reject) => {
+	const User = userModel;
+
+	try {
+		const data = await db.query(
+			`UPDATE users SET username = $1, location = $2 WHERE id = $3 RETURNING *;`,
+			[update.username, update.location, id]
+		);
+		const user = new User(data.rows[0]);
+		resolve(user);
+	} catch (error) {
+		reject('Error updating user');
+	}
+};
+
+module.exports = { getAllUsers, findUserWithId, addNewUser, updateUser };

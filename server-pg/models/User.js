@@ -1,4 +1,9 @@
-const { getAllUsers, addNewUser } = require('../controllers/user');
+const {
+	getAllUsers,
+	addNewUser,
+	updateUser,
+	findUserWithId
+} = require('../controllers/user');
 
 class User {
 	constructor(data) {
@@ -11,8 +16,16 @@ class User {
 		return new Promise(getAllUsers(User));
 	}
 
+	static find(id) {
+		return new Promise(findUserWithId(id, User));
+	}
+
 	static create(username, location) {
 		return new Promise(addNewUser(username, location, User));
+	}
+
+	update(body) {
+		return new Promise(updateUser(this.id, body, User));
 	}
 }
 
