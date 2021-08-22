@@ -1,5 +1,10 @@
+const User = require('../models/User');
 const db = require('../database/config');
 
+/**
+ * Get all users from the database and return them as instances of  the 'User' model.
+ * @param {User} userModel should be called with the 'User' model.
+ */
 const getAllUsers = userModel => async (resolve, reject) => {
 	const User = userModel;
 
@@ -12,4 +17,22 @@ const getAllUsers = userModel => async (resolve, reject) => {
 	}
 };
 
-module.exports = { getAllUsers };
+/**
+ * @param {User} userModel should be called with the 'User' model.
+ */
+const addNewUser = (username, location, userModel) => async (resolve, reject) => {
+	const User = userModel;
+
+	try {
+		const data = await db.query(
+			'INSERT INTO users (username, location) VALUES($1, $2) RETURNING *;',
+			[username, location]
+		);
+		const user = new User(data.rows[0]);
+		resolve(user);
+	} catch (error) {
+		reject('Error adding new user to the database');
+	}
+};
+
+module.exports = { getAllUsers, addNewUser };

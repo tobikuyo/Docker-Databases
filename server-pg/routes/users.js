@@ -12,4 +12,16 @@ router.get('/', async (req, res) => {
 	}
 });
 
+router.post('/', async (req, res) => {
+	try {
+		const { username, location } = req.body;
+		const user = await User.create(username, location);
+		res.status(201).json({ data: user });
+	} catch (error) {
+		res.status(400).json({
+			message: 'There was an error with adding this new user'
+		});
+	}
+});
+
 module.exports = router;

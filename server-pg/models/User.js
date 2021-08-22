@@ -1,4 +1,4 @@
-const { getAllUsers } = require('../controllers/user');
+const { getAllUsers, addNewUser } = require('../controllers/user');
 
 class User {
 	constructor(data) {
@@ -9,6 +9,10 @@ class User {
 
 	static all() {
 		return new Promise(getAllUsers(User));
+	}
+
+	static create(username, location) {
+		return new Promise(addNewUser(username, location, User));
 	}
 }
 
