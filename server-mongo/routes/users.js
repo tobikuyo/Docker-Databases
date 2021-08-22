@@ -49,4 +49,18 @@ router.patch('/:id', async (req, res) => {
 	}
 });
 
+router.delete('/:id', async (req, res) => {
+	const { id } = req.params;
+
+	try {
+		const user = await User.find(id);
+		await user.remove();
+		res.status(204).json({
+			message: `The user with the id '${id}' was removed successfully`
+		});
+	} catch (error) {
+		res.status(404).json({ message: `There is no user with the id '${id}'` });
+	}
+});
+
 module.exports = router;

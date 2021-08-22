@@ -56,7 +56,7 @@ const addNewUser = (username, location, userModel) => async (resolve, reject) =>
 };
 
 /**
- * @param {object} update should be called with the request body, containing the properties that need to be updated.
+ * @param {object} update should be called with the request body containing the properties that need to be updated.
  * @param {User} userModel  should be called with the 'User' model.
  */
 const updateUser = (id, update, userModel) => async (resolve, reject) => {
@@ -77,4 +77,20 @@ const updateUser = (id, update, userModel) => async (resolve, reject) => {
 	}
 };
 
-module.exports = { fetchAllUsers, findUserWithId, addNewUser, updateUser };
+const removeUser = id => async (resolve, reject) => {
+	try {
+		const db = await init();
+		await db.collection('users').deleteOne({ _id: ObjectId(id) });
+		resolve('Successfully deleted user from database');
+	} catch (error) {
+		reject('Error deleting user from database');
+	}
+};
+
+module.exports = {
+	fetchAllUsers,
+	findUserWithId,
+	addNewUser,
+	updateUser,
+	removeUser
+};
