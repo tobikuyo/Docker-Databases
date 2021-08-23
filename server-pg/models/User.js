@@ -2,7 +2,8 @@ const {
 	getAllUsers,
 	addNewUser,
 	updateUser,
-	findUserWithId
+	findUserWithId,
+	removeUser
 } = require('../controllers/user');
 
 class User {
@@ -26,6 +27,10 @@ class User {
 
 	update(body) {
 		return new Promise(updateUser(this.id, body, User));
+	}
+
+	remove() {
+		return new Promise(removeUser(this.id));
 	}
 }
 

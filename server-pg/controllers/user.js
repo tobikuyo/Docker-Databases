@@ -65,4 +65,13 @@ const updateUser = (id, update, userModel) => async (resolve, reject) => {
 	}
 };
 
-module.exports = { getAllUsers, findUserWithId, addNewUser, updateUser };
+const removeUser = id => async (resolve, reject) => {
+	try {
+		await db.query('DELETE FROM users WHERE id = $1;', [id]);
+		resolve('User was deleted successfully');
+	} catch (error) {
+		reject('Error deleting user from database');
+	}
+};
+
+module.exports = { getAllUsers, findUserWithId, addNewUser, updateUser, removeUser };
